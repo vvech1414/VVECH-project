@@ -19,7 +19,7 @@
 - Все consent-экраны имеют чёткое "Согласен / Не согласен", без pre-selected опций
 - При отказе от consent — приложение явно объясняет, что использование невозможно, и закрывается без сохранения данных
 
-`[VERIFY_WITH_CODE: какой именно auth-метод реализован в прототипе]`
+**Состояние в прототипе (2026-05-13):** реальной авторизации нет. Онбординг — 5 экранов в `src/routes/patient/entry/` (Welcome → Account → Access → Consents → Setup) + Vasily onboarding. Phone/SMS-flow смоделирован как UI-mock (без отправки SMS, без backend-валидации). Биометрия — UI-стаб. Состояние онбординга хранится в Zustand-флаге `hasCompletedOnboarding` (`src/store/store.ts`), который читается в `OnboardingGate` (`src/App.tsx:46`). **Статус: PARTIAL — UI готов, реальный auth отсутствует по scope.**
 
 ---
 
@@ -31,8 +31,8 @@
 - Файловую систему (PDF)
 **FR-02.2** При съёмке через камеру приложение автоматически кадрирует и выравнивает документ
 **FR-02.3** Пользователь может загрузить multi-page документ (несколько фото в одну запись)
-**FR-02.4** Поддерживаются форматы: JPG, PNG, PDF (`[VERIFY_WITH_CODE]` — точный список из кода)
-**FR-02.5** Максимальный размер файла: `[VERIFY_WITH_CODE]` MB
+**FR-02.4** Поддерживаются форматы: JPG, PNG, PDF — заявлены в копирайте `src/copy/ru.ts` и UI флоу `UploadFlow.tsx` / `DocUpload.tsx`; фактической валидации MIME в прототипе нет (mock-загрузка).
+**FR-02.5** Максимальный размер файла: в прототипе не enforced (нет реальной загрузки на backend; ограничение — браузерное).
 **FR-02.6** При загрузке пользователь указывает тип документа (анализ, заключение, выписка, рецепт, другое)
 
 **Acceptance Criteria:**
@@ -55,7 +55,7 @@
 - Время OCR одного документа ≤ 15 секунд
 - При ручной правке пользователем — изменения логируются для аудита
 
-`[VERIFY_WITH_CODE: какой OCR-engine используется — Tesseract / Vision API / отечественный]`
+**Состояние в прототипе:** OCR-engine — **симулированный** (`src/lib/ocr-mock.ts`, 53 строки). Возвращает детерминированные mock-результаты с разными confidence-уровнями (high / low / no-recognition) для демонстрации UI-состояний ревью и ручной правки. Никакого Tesseract / Vision API / отечественного движка в прототипе нет — это сознательное решение по scope (см. `intel-doc-prototype/CLAUDE.md` §3 "Minimal integration"). **Статус: PARTIAL — UI и состояния готовы, реальный OCR заменён mock'ом.**
 
 ---
 
@@ -113,7 +113,7 @@
 **FR-07.3** Пользователь может настроить, какие типы уведомлений получать
 **FR-07.4** Уведомления никогда не содержат медицинскую информацию в тексте (только нейтральные формулировки)
 
-`[VERIFY_WITH_CODE: реализованы ли push-уведомления в прототипе или это TODO]`
+**Состояние в прототипе:** нативные push-уведомления **не реализованы** (нет Service Worker / Web Push, нет mobile-native). Вместо этого есть **in-app inbox** (`src/routes/patient/Notifications.tsx`) и страница действия по конкретному уведомлению (`NotificationAction.tsx`), плюс `NotificationBanner.tsx` для inline-баннеров. Push как канал доставки — TODO post-MVP. **Статус: PARTIAL — UI inbox готов, доставка вне приложения не реализована.**
 
 ---
 
@@ -195,10 +195,20 @@
 
 ---
 
-## 3. Open Questions
+## 3. Status Matrix (after first src/ scan, 2026-05-13)
 
-- `[VERIFY_WITH_CODE]` Какие FR из этого списка уже имеют код, какие — только UI, какие — TODO?
-- Какие NFR валидируются автотестами в прототипе vs только описаны в документации?
-- Нужна ли проработка edge cases для слабого интернета / низкосортных устройств для защиты или это nice-to-have?
+| Группа | Статус в прототипе | Заметки |
+| --- | --- | --- |
+| FR-01 Identity & Onboarding | **PARTIAL** | UI-flow из 5 экранов готов; реальный auth отсутствует по scope |
+| FR-02 Document Capture | **PARTIAL** | UI и выбор источника готовы (`UploadFlow.tsx`, `DocUpload.tsx`); реальная загрузка mock |
+| FR-03 OCR & Structuring | **PARTIAL** | UI ревью + ручная правка готовы; OCR-engine — mock (`src/lib/ocr-mock.ts`) |
+| FR-04 Document Library | **PARTIAL** | Лента + детальная карточка (`History.tsx`, `AnalysisCardScreen.tsx`); поиск/фильтры — не все |
+| FR-05 Results & Trends | **PARTIAL** | Карточки анализов с распакованными показателями; полноценных trend-графиков нет |
+| FR-06 Consent & Sharing | **DONE (UI)** | `Consents.tsx`, `Access.tsx`, `ConsentModal.tsx`, `RevokeAccessSheet.tsx`, `consent-text.ts` |
+| FR-07 Notifications | **PARTIAL** | In-app inbox готов; нативные push — TODO |
+| FR-08 Profile & Settings | **PARTIAL** | `Profile.tsx` есть; data portability / удаление аккаунта — UI-стабы |
 
-*Claude Code: при сканировании `src/` обнови этот файл — пометь каждое требование статусом DONE / PARTIAL / TODO.*
+## 4. Open Questions
+
+- Какие NFR валидируются автотестами в прототипе vs только описаны в документации? → **В прототипе автотестов нет** (нет `*.test.ts`, нет vitest/jest в `package.json`). Все NFR в защите идут как design-intent для production, не как verified-в-коде свойства. Это нужно открыто проговорить на защите.
+- Нужна ли проработка edge cases для слабого интернета / низкосортных устройств для защиты или это nice-to-have? → На защите можно ограничиться demo на стабильном Wi-Fi; offline-mode UI-стабы уже есть, реальный Service Worker — post-MVP.

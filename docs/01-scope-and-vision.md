@@ -14,7 +14,32 @@
   - OCR-распознавание результатов анализов
   - Просмотр истории документов и результатов
   - Consent / согласие на обработку данных и передачу врачу
-  - `[VERIFY_WITH_CODE]` — список фактических экранов в `src/`
+
+**Фактически смонтированные экраны (из `intel-doc-prototype/src/App.tsx`):**
+
+*Patient onboarding (5 экранов):*
+
+1. `/patient/entry/welcome` — Welcome (QR / link entry, partner context)
+2. `/patient/entry/account` — Account setup
+3. `/patient/entry/access` — Grant access to ЛПУ
+4. `/patient/entry/consents` — раздельные consent-чекбоксы (152-ФЗ)
+5. `/patient/entry/vasily-onboarding` + `/patient/entry/setup` — Vasily helper intro
+
+*Patient app post-onboarding (≈15 экранов):*
+
+- `/patient/home` — Home / prep screen
+- `/patient/vasily` — Vasily helper
+- `/patient/checklist` — visit checklist
+- `/patient/upload` (+ `/:type`) — UploadFlow (camera/gallery/PDF)
+- `/patient/doc-upload` (+ `/:type`) — DocUpload (quality check + OCR review)
+- `/patient/history` + `/patient/history/:analysisId` — analysis history, analysis card
+- `/patient/notifications` + `/patient/notification/:requestId` — incoming doctor requests / plans
+- `/patient/book` — confirm next appointment
+- `/patient/extra-doctors` — additional doctors
+- `/patient/service/:slug` — service placeholder
+- `/patient/profile` — Profile & access management
+
+Doctor и Admin маршруты в `App.tsx` **не смонтированы** (компоненты в `src/components/doctor/` и `src/components/admin/` существуют, но в защите — out of scope).
 
 ### Out of Scope
 - Doctor web dashboard (существует в полной версии продукта, но не в защите)
@@ -66,7 +91,7 @@ IntelDoc Patient App — **единый цифровой кабинет паци
 
 IntelDoc в полной версии содержит **17 инициатив** и **97 эпиков**. Для защиты focus на patient-side инициативы:
 
-`[VERIFY_WITH_CODE]` — точный список 17 инициатив должен быть взят из существующих project cards. Ниже — структурный шаблон, который Claude Code должен заполнить из реальных данных проекта.
+**Состояние на 2026-05-13:** project cards с 17 инициативами в репозитории пока не лежат отдельными файлами. Ниже — структурный шаблон из 9 patient-side инициатив, выведенный из реально смонтированных маршрутов в `intel-doc-prototype/src/App.tsx`. До защиты (2026-05-16) полное оформление 17 инициатив отдельными файлами в `docs/initiatives/` остаётся опциональным — для слайда 02 достаточно ссылки на этот раздел.
 
 ### Patient-side initiatives (predicted core set)
 1. **Identity & Onboarding** — регистрация, верификация, согласие
@@ -84,7 +109,7 @@ IntelDoc в полной версии содержит **17 инициатив**
 - Admin / analytics (14–17)
 
 ### Project Card Template
-Каждая инициатива описывается по 12-секционному шаблону (см. CLAUDE.md Section 6). Полные карточки лежат в `docs/initiatives/[ID].md` — `[VERIFY_WITH_CODE: создать файлы, если их нет; наполнить из существующих materials]`.
+Каждая инициатива описывается по 12-секционному шаблону (см. CLAUDE.md Section 6). Папка `docs/initiatives/` на 2026-05-13 пустая. Заполнение карточек 1-в-1 — post-defense backlog; до 2026-05-16 фокус на trip-wire артефактах (прототип + слайды + Figma).
 
 ---
 
@@ -122,11 +147,9 @@ IntelDoc в полной версии содержит **17 инициатив**
 
 ---
 
-## 6. Open Questions
+## 6. Open Questions — Resolved on first scan
 
-- `[VERIFY_WITH_CODE]` Сколько именно инициатив из 17 покрывает текущий код прототипа?
-- Какие из patient-side инициатив реализованы в прототипе полностью vs частично vs только UI?
-- Есть ли в коде уже реализованный consent flow или это TODO для дизайна?
-- Локализация: только RU или есть EN-strings в коде?
-
-*Claude Code: ответь на эти вопросы при первом сканировании `src/`.*
+- ~~Сколько инициатив из 17 покрывает прототип?~~ → **9 patient-side инициатив имеют видимое UI-присутствие в смонтированных маршрутах** (Identity & Onboarding, Document Capture, OCR & Structuring, Document Library, Consent & Sharing, Notifications, Profile & Settings, плюс частично — Results/Trends в виде analysis card, Audit Trail в виде access management). Doctor- и admin-инициативы — out of scope защиты.
+- ~~Реализованы полностью / частично / только UI?~~ → **Все 9 представлены как UI с mock-данными.** Реальной серверной интеграции нет ни в одной (по дизайну). Подробная DONE/PARTIAL/TODO-разбивка — в `docs/03-requirements.md`.
+- ~~Есть ли в коде consent flow?~~ → **Да.** `src/lib/consent-text.ts` (тексты согласий, раздельные), `src/components/patient/ConsentModal.tsx` (модалка), `src/routes/patient/entry/Consents.tsx` (экран онбординга), `src/routes/patient/entry/Access.tsx` (выдача доступа ЛПУ), `src/components/patient/RevokeAccessSheet.tsx` (отзыв доступа).
+- ~~Локализация?~~ → **Только RU.** `src/copy/ru.ts` (799 строк) + `src/copy/index.ts`. Никаких `en.ts` или i18n-фреймворка. Отдельные английские строки встречаются в служебных файлах (наименования вариантов компонентов), но UI-копирайт — на русском.

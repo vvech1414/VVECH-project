@@ -40,7 +40,9 @@
 3. Реализовать кликабельный прототип на JavaScript/React с ключевыми сквозными сценариями: загрузка документа, OCR, consent-flow, передача врачу
 4. Подготовить артефакты защиты: презентацию, размещение прототипа по внешней ссылке (Vercel), оформление дизайн-системы в Figma
 
-**Изображение справа:** скриншот главного экрана IntelDoc Patient App `[VERIFY_WITH_CODE: использовать реальный скриншот после Vercel-деплоя]`
+**Изображение справа:** скриншот главного экрана IntelDoc Patient App.
+- **Источник:** `/patient/home` после Vercel-деплоя, мобильный viewport 390×844.
+- **TODO до 2026-05-16:** сделать скриншот после стабилизации Track A и сохранить в `prototypes/figma-export/slide-02-hero.png`.
 
 ---
 
@@ -61,7 +63,7 @@
 
 4. **Регуляторные ограничения.** 152-ФЗ "О персональных данных" + ФЗ-242 (хранение данных на территории РФ) + ФЗ-323 (специальная категория ПДн для медицинских данных). Архитектура решения учитывает: явный consent на каждое действие, audit log, локальное шифрование, серверная инфраструктура — на территории РФ.
 
-`[VERIFY_WITH_CODE / MARKET_RESEARCH: при наличии существующего конкурентного анализа в проекте — обновить конкретные продукты и цифры]`
+**Состояние на 2026-05-13:** отдельных market-research артефактов в репозитории нет. На защите конкурентный анализ идёт **как качественное позиционирование** (3 группы решений, перечисленные выше). Если до 2026-05-16 будет потребность в цифрах — можно дописать после короткой ресёрч-сессии или сослаться на отраслевые отчёты (Roszdravnadzor, аналитика рынка мед-сервисов в РФ).
 
 ---
 
@@ -168,7 +170,7 @@
 - Видны компоненты: header, navigation, document card, filter chips, status badges
 - Должна быть видна **системность**: повторяющиеся отступы, единая типографика, согласованные цвета
 
-`[VERIFY_WITH_CODE: подготовить screenshots после Vercel-деплоя в desktop-разрешении (1440×900)]`
+**TODO до 2026-05-16:** после Vercel-деплоя сделать desktop-скриншоты (1440×900) экранов: `/patient/home`, `/patient/history`, `/patient/profile`. Сохранить в `prototypes/figma-export/slide-07-desktop-*.png`.
 
 ---
 
@@ -181,7 +183,7 @@
 - Экран загрузки документа
 - Consent-экран (как ключевой UX-дифференциатор)
 
-`[VERIFY_WITH_CODE: подготовить screenshots в mobile-разрешении (390×844 — iPhone 15 / 16)]`
+**TODO до 2026-05-16:** mobile-скриншоты (390×844) ключевых экранов: `/patient/home`, `/patient/upload`, `/patient/doc-upload` (OCR review), `/patient/entry/consents` (consent-flow как ключевой UX-дифференциатор). Сохранить в `prototypes/figma-export/slide-08-mobile-*.png`.
 
 ---
 
@@ -189,19 +191,22 @@
 
 **Языки программирования:**
 - JavaScript (ES2023+) — основной язык по программе ДПП
-- TypeScript — `[VERIFY_WITH_CODE: указать, если используется в прототипе]`
+- **TypeScript 5.6** — статическая типизация (`tsc && vite build`, см. `package.json`)
 - HTML5 / CSS3 — разметка и стили
-- SQL — `[VERIFY_WITH_CODE: только если есть backend mock с локальной БД]`
+- SQL — *не используется*; всё состояние в Zustand store (in-memory mock), backend отсутствует по требованию scope
 
 **Средства разработки и инструменты:**
-- React 18 — UI-фреймворк
-- Vite / Next.js — `[VERIFY_WITH_CODE: уточнить bundler/framework]`
+- **React 18.3** + **React Router 7.14** — UI и роутинг
+- **Vite 5.4** — bundler / dev-server (Next.js не используется)
+- **Zustand 5** — клиентский store (`src/store/`)
+- **Framer Motion 12** — анимации
+- **Lucide React** — иконки
+- **Tailwind CSS 3.4** + CSS custom properties (`src/design/colors_and_type.css`) — стили
 - Vercel — deployment и hosting прототипа
 - Figma — оформление дизайн-системы
 - Claude Design + Claude Code — AI-инструменты разработки
-- Antigravity IDE — основная среда разработки
+- Antigravity IDE (Gemini 3 Pro) — основная среда разработки
 - Git / GitHub — версионирование
-- Tailwind CSS / CSS Modules — `[VERIFY_WITH_CODE: что используется для стилей]`
 
 *Стол можно расширить до 4–5 строк с каждой стороны.*
 
@@ -250,7 +255,7 @@
 **Вариант 3 — если проект полностью индивидуальный:**
 Оставить одну карточку, удалив две другие в шаблоне.
 
-`[USER_DECISION_NEEDED]` — выбрать вариант. Рекомендация: **Вариант 1**, потому что это сильный сигнал на защите о владении тремя компетенциями.
+**Подтверждено автором: Вариант 1 (соло с тремя ролями).** Защита проходит одним человеком, на слайде показываем владение тремя компетенциями (PM / Designer / Frontend).
 
 ---
 
@@ -289,11 +294,15 @@
 
 ---
 
-## 4. Open Questions
+## 4. Open Questions — Resolved
 
-- `[USER_DECISION_NEEDED]` Соло-формат команды (Вариант 1/2/3 — см. слайд 11)?
-- `[VERIFY_WITH_CODE]` Какой именно framework используется — Vite + React или Next.js?
-- `[VERIFY_WITH_CODE]` Есть ли в коде уже реализованный консент-flow или это упрощённый mock?
-- `[USER_INPUT]` Уточнить дату защиты — определяет жёсткость roadmap по этапам
+- ~~`[USER_DECISION_NEEDED]` Соло-формат команды~~ → **Вариант 1 (соло)**, см. слайд 11.
+- ~~`[VERIFY_WITH_CODE]` Какой framework — Vite или Next.js?~~ → **Vite 5.4 + React 18.3 + TypeScript 5.6** (см. `intel-doc-prototype/package.json`, `vite.config.ts`).
+- ~~`[VERIFY_WITH_CODE]` Реализован ли консент-flow?~~ → **Да, реализован.** Раздельные согласия в `src/lib/consent-text.ts`, экран `routes/patient/entry/Consents.tsx`, переиспользуемый `components/patient/ConsentModal.tsx`, выдача доступа ЛПУ — `routes/patient/entry/Access.tsx`.
+- ~~`[USER_INPUT]` Дата защиты~~ → **2026-05-16** (подтверждено автором).
 
-*Claude Code: ответы на эти вопросы критичны для финализации презентации. Запроси у автора при первой итерации.*
+## 5. Still Open (требуют решения автора)
+
+- Длительность защиты и наличие Q&A слота (см. `docs/04-constraints-and-metrics.md` §3 — Defense format)?
+- Допустимо ли явно упоминать AI-tools (Claude Design, Figma MCP) на защите?
+- Live demo на проекторе или с личного ноутбука?

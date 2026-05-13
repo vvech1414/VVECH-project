@@ -37,13 +37,13 @@
 ### Stack constraints
 - **Frontend:** React (existing prototype) — нельзя переписать на другом фреймворке
 - **Deployment:** Vercel (для внешней ссылки на защиту)
-- **Mobile:** прототип может быть либо PWA на React, либо React Native — `[VERIFY_WITH_CODE]`
-- **Backend:** для защиты допустим mock / fixture-based, реальный backend не требуется
+- **Mobile:** прототип — **mobile-first web (Vite + React + Tailwind)**, разрабатывается под 390 px iPhone, разворачивается как обычный SPA на Vercel. React Native не используется. Web-app оптимизирован для просмотра с телефона; PWA-манифест на текущем этапе не подключён.
+- **Backend:** реальный backend отсутствует. Все данные — in-memory Zustand store (`src/store/`) + детерминированные mock-фикстуры (`src/data/mockData.ts`, `src/data/adminMockData.ts`). OCR имитируется через `src/lib/ocr-mock.ts`.
 
 ### Resource constraints
-- **Team:** Один разработчик (автор защиты) + AI-инструменты
+- **Team:** Один разработчик (автор защиты, соло-формат) + AI-инструменты
 - **Budget:** только подписки на инструменты (Claude, Vercel free tier, Figma free)
-- **Time:** ориентация на defense date — конкретная дата `[TO BE FILLED]`
+- **Time:** **дата защиты — 16 мая 2026 (2026-05-16)**. До защиты — 3 дня от текущей точки, что делает roadmap по этапам жёстким: фокус на стабилизации Track A + сборку design-system артефактов + финализацию слайдов.
 
 ### Scope constraints
 - **MVP-only:** не all-17-initiatives, focus на patient-side core (см. `docs/01-scope-and-vision.md`)
@@ -55,12 +55,14 @@
 ## 3. Business / Educational Constraints
 
 ### Defense format
-- Длительность защиты: `[TO BE FILLED]`
+- **Дата:** 2026-05-16 (понедельник)
+- **Состав:** соло-защита (один автор, три роли в нарративе — PM / Designer / Frontend; см. слайд 11)
+- Длительность защиты: `[TO BE FILLED — уточнить у программы HINC SANITAS]`
 - Аудитория: преподаватель + комиссия + одногруппники
 - Формат: live presentation + Q&A
 - Артефакты, которые проверяются:
-  - Кликабельный прототип (внешний URL)
-  - Презентация
+  - Кликабельный прототип (внешний URL — Vercel)
+  - Презентация по шаблону HINC SANITAS (12 слайдов)
   - Figma-файл с design system
 
 ### Защитимость нарратива
@@ -142,8 +144,9 @@
 
 ## 7. Open Questions
 
-- Конкретная дата защиты — определяет roadmap всех треков
+- ~~Конкретная дата защиты~~ → **2026-05-16** (подтверждено автором; ≤ 3 дня от старта работы Claude Code).
 - Допустимо ли упоминать AI-tools на защите (Claude Design, Figma MCP) или ожидается, что всё сделано "руками"
 - Будет ли live demo на проекторе или показ через свой ноутбук — определяет требования к offline mode
+- Точная длительность слота защиты (для тайминга демо ↔ слайдов)
 
-*Claude Code: эти вопросы требуют ответа от автора — добавь их в первый отчёт.*
+*Claude Code: 1 вопрос решён, остальные требуют ответа от автора.*
