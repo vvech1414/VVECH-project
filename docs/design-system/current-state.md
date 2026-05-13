@@ -1,6 +1,6 @@
 # Design System — Current State (snapshot 2026-05-13)
 
-> **Purpose:** input for Claude Design (Track B step 2) so it doesn't extract blind. Compiled from `intel-doc-prototype/src/` at branch `main`, commit base `20782ec`.
+> **Purpose:** input for Claude Design (Track B step 2) so it doesn't extract blind. Compiled from `intel-doc-prototype/src/` at branch `main`, commit base `5d2f703` (patient prototype imported in `db36db1`).
 > **Scope:** Patient app only (defence scope). Components in `src/components/doctor/` and `src/components/admin/` exist on disk but are not mounted in `App.tsx` and are out of scope for the defence on 2026-05-16.
 
 ---
@@ -9,7 +9,7 @@
 
 - **Bundler/runtime:** Vite 5.4, React 18.3, TypeScript 5.6, React Router 7.14.
 - **State:** Zustand 5 (`src/store/store.ts` + `seed.ts` + `selectors.ts` + `actions.ts`).
-- **Styling:** Tailwind CSS 3.4 (`tailwind.config.js`) + CSS custom properties (`src/design/colors_and_type.css`, 316 LoC) + `src/index.css`.
+- **Styling:** Tailwind CSS 3.4 (`tailwind.config.js`) + CSS custom properties (`src/design/colors_and_type.css`, 315 LoC) + `src/index.css`.
 - **Motion:** Framer Motion 12.
 - **Icons:** Lucide React.
 - **Fonts:** Manrope (UI), Montserrat / Montserrat Alternates (display), Inter (data/tables). Loaded from Google Fonts.
@@ -148,9 +148,17 @@ These are screen-level building blocks composed inside the routes in §3.5.
 
 `CoBrandLockup` (IntelDoc × Clinic N lockup), `DemoToolbar` (dev-only role/segment switcher), `VasilyMascot`.
 
-### 3.5 Routes (`src/routes/patient/`)
+### 3.5 Feature modules (`src/features/`)
 
-Mounted in `src/App.tsx` (22 routes total — 6 onboarding + 16 main app). See `docs/01-scope-and-vision.md` §1 for the full list.
+`vasily-onboarding/` — screen-level feature folder (`ui/VasilyOnboardingScreen.tsx` + `model/points.ts`, exported via `index.ts`). Mounted at `/patient/entry/vasily-onboarding`. This is the only feature folder currently; other onboarding screens live directly under `src/routes/patient/entry/`.
+
+### 3.6 Routes (`src/routes/patient/`)
+
+Mounted in `src/App.tsx` — **21 screen routes** (6 onboarding + 15 main app) plus 3 redirect-only Route elements (root, `/patient/entry`, catch-all). See `docs/01-scope-and-vision.md` §1 for the full list.
+
+Onboarding (6): `entry/Welcome`, `entry/Account`, `entry/Access`, `entry/Consents`, `features/vasily-onboarding/ui/VasilyOnboardingScreen`, `entry/Setup`.
+
+Main app (15): `Home`, `VasilyHelper`, `History`, `Notifications`, `AnalysisCardScreen` (`/patient/history/:analysisId`), `Checklist`, `UploadFlow` (and `:type` variant), `DocUpload` (and `:type` variant), `NotificationAction` (`/patient/notification/:requestId`), `BookMain`, `ExtraDoctors`, `ServicePlaceholder` (`/patient/service/:slug`), `Profile`.
 
 ---
 
@@ -208,10 +216,10 @@ Mounted in `src/App.tsx` (22 routes total — 6 onboarding + 16 main app). See `
 
 Items that look load-bearing for the defence narrative but feel incomplete on first read of the code. Claude Design should treat these as starting hypotheses for the `proposed-changes.md` output.
 
-1. **Two parallel button systems.** `primitives/Button.tsx` is the modern canonical (4 variants, 2 sizes, icon slots). `components/PrimaryButton.tsx` + `components/SecondaryButton.tsx` are older single-purpose wrappers still imported in some routes. → Decide: deprecate the legacy pair or formalise both?
+1. **Dead legacy button components.** `primitives/Button.tsx` is the canonical (4 variants, 2 sizes, icon slots). `components/PrimaryButton.tsx` + `components/SecondaryButton.tsx` exist on disk but have **zero imports** in `src/` (verified by grep at 2026-05-13). → Either delete them outright (cleanest), or formalise them as deprecation-warning wrappers if anyone still references them externally. Default recommendation: delete before Figma extraction so the System page doesn't show two button systems.
 2. **Two status-chip components.** `components/StatusChip.tsx` and `primitives/StatusBadge.tsx` share semantics (success / warning / error / info / neutral). → Pick one canonical.
-3. **Spacing tokens declared but inconsistently consumed.** `--space-*` exists, but most components use raw Tailwind `p-3/p-4/gap-2` etc. → Decide whether to back Tailwind by token aliases (e.g., `spacing.4: 'var(--space-4)'`).
-4. **Trends/graphs.** Chart tokens (`--chart-*`) are defined but no chart component is shipped — `AnalysisCardScreen` shows metric rows only. → Either add a minimal sparkline / trend component or scope it as post-MVP and remove the data-viz tokens from the System page in Figma.
+3. **Spacing tokens declared but never consumed.** `--space-1` → `--space-10` exist in `colors_and_type.css` but grep finds **zero** references in the rest of `src/` (verified 2026-05-13). Every component uses raw Tailwind `p-3/p-4/gap-2` etc. → Decide: either delete the `--space-*` block, or back Tailwind by token aliases (e.g., `spacing.4: 'var(--space-4)'`) so the tokens actually drive layout.
+4. **Trends/graphs.** Chart tokens (`--chart-*`) are defined but never consumed outside `colors_and_type.css`. The only `Sparkline` component lives in `src/components/admin/` (out of scope) and is reused by `src/components/doctor/AnalysesWorkspace.tsx` (also out of scope). `AnalysisCardScreen` shows metric rows only. → Either add a minimal sparkline / trend component to the patient app or scope it as post-MVP and remove the data-viz tokens from the System page in Figma.
 5. **Dark-mode tokens declared but never visually tested.** `@media (prefers-color-scheme: dark)` block exists in `colors_and_type.css`. → Decide: include in defence Figma or strip for clarity.
 6. **Legacy Vasily palette still in source.** `--legacy-*` tokens kept for the marketing deck / mascot. Should they appear in the Figma library (under "Marketing" subsection) or be excluded?
 7. **No empty-state pattern shipped explicitly.** Routes likely render text-only fallbacks. → Worth proposing a reusable `EmptyState` component for `History`, `Notifications`, and `Profile/access list`.
