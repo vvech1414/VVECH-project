@@ -47,7 +47,6 @@
   --blue-300:       #93C5FD;   /* chart highlight */
   --blue-200:       #BFDBFE;   /* chip surface */
   --blue-100:       #DBEAFE;   /* avatar bg, soft chip */
-  --blue-075:       #E7EFFE;
   --blue-050:       #EFF6FF;   /* range band background */
 
   /* Secondary / category tints — pastel fills visible on patient detail,
@@ -187,9 +186,9 @@
   /* ---------- Radii ---------- */
   --radius-xs:  6px;
   --radius-sm:  8px;
-  --radius-md:  12px;   /* buttons, chips */
-  --radius-lg:  16px;   /* cards */
-  --radius-xl:  20px;   /* large panels */
+  --radius-md:  12px;   /* buttons, chips, nested elements inside cards */
+  --radius-lg:  16px;   /* secondary cards, list items, inner panels */
+  --radius-xl:  20px;   /* primary content cards (Home / Profile / Notifications) */
   --radius-2xl: 24px;
   --radius-pill: 999px;
 

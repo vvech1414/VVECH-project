@@ -1,7 +1,8 @@
 # Design System — Current State (snapshot 2026-05-13)
 
-> **Purpose:** input for Claude Design (Track B step 2) so it doesn't extract blind. Compiled from `intel-doc-prototype/src/` at branch `main`, commit base `5d2f703` (patient prototype imported in `db36db1`).
+> **Purpose:** input for Claude Design (Track B step 2) so it doesn't extract blind. Compiled from `intel-doc-prototype/src/` at branch `main`, originally seeded at commit `5d2f703`; updated below to reflect the Track B step 3 application pass.
 > **Scope:** Patient app only (defence scope). Components in `src/components/doctor/` and `src/components/admin/` exist on disk but are not mounted in `App.tsx` and are out of scope for the defence on 2026-05-16.
+> **Step-3 status (2026-05-13):** code changes from `proposed-changes.md` items §1, §2, §3, §7, §9, §10, §12 have been applied; §4, §5, §6, §11 are doc-only / Figma-only and left untouched in code; §13 (unannounced emerald ramp) rejected and recorded.
 
 ---
 
@@ -116,7 +117,8 @@ Tracking: `--tracking-tight` -0.02em, `--tracking-ui` 0.005em, `--tracking-caps`
 | `FAB` | `primitives/FAB.tsx` | floating action button | bottom-right of mobile shell |
 | `TabBar` | `primitives/TabBar.tsx` | bottom tab navigation | 4-slot mobile bar |
 | `Avatar` | `primitives/Avatar.tsx` | round image / initials | size variants |
-| `StatusBadge` | `primitives/StatusBadge.tsx` | success / warning / error / info / neutral | mirrors `StatusChip` semantics for inline usage |
+| `StatusBadge` | `primitives/StatusBadge.tsx` | `tone`: success / warning / error / info / neutral · sizes sm/md · optional `pulse` | **canonical** status pill after §2 merge (legacy `StatusChip` removed) |
+| `EmptyState` | `primitives/EmptyState.tsx` | tone: info / neutral · action variant: link / button (with optional icon) | added §7, drop-in for empty inboxes/lists |
 
 ### 3.2 Shared components (`src/components/`)
 
@@ -124,9 +126,6 @@ Tracking: `--tracking-tight` -0.02em, `--tracking-ui` 0.005em, `--tracking-caps`
 | --- | --- | --- |
 | `AppShell` | `components/AppShell.tsx` | mobile shell variant (top header + bottom tab) |
 | `PartnerHeader` | `components/PartnerHeader.tsx` | sticky clinic-context header (ЭНЦ name, logo slot) |
-| `StatusChip` | `components/StatusChip.tsx` | small pill: success / warning / error / info / neutral · sizes sm/md |
-| `PrimaryButton` | `components/PrimaryButton.tsx` | legacy primary CTA (older — `Button` is the new canonical) |
-| `SecondaryButton` | `components/SecondaryButton.tsx` | legacy secondary CTA |
 | `ActionCard` | `components/ActionCard.tsx` | tappable card with icon + title + helper text |
 | `ChecklistStep` | `components/ChecklistStep.tsx` | row used in visit prep / plan progress |
 | `AnalysisListItem` | `components/AnalysisListItem.tsx` | row in analyses history |
@@ -216,22 +215,29 @@ Main app (15): `Home`, `VasilyHelper`, `History`, `Notifications`, `AnalysisCard
 
 Items that look load-bearing for the defence narrative but feel incomplete on first read of the code. Claude Design should treat these as starting hypotheses for the `proposed-changes.md` output.
 
-1. **Dead legacy button components.** `primitives/Button.tsx` is the canonical (4 variants, 2 sizes, icon slots). `components/PrimaryButton.tsx` + `components/SecondaryButton.tsx` exist on disk but have **zero imports** in `src/` (verified by grep at 2026-05-13). → Either delete them outright (cleanest), or formalise them as deprecation-warning wrappers if anyone still references them externally. Default recommendation: delete before Figma extraction so the System page doesn't show two button systems.
-2. **Two status-chip components.** `components/StatusChip.tsx` and `primitives/StatusBadge.tsx` share semantics (success / warning / error / info / neutral). → Pick one canonical.
-3. **Spacing tokens declared but never consumed.** `--space-1` → `--space-10` exist in `colors_and_type.css` but grep finds **zero** references in the rest of `src/` (verified 2026-05-13). Every component uses raw Tailwind `p-3/p-4/gap-2` etc. → Decide: either delete the `--space-*` block, or back Tailwind by token aliases (e.g., `spacing.4: 'var(--space-4)'`) so the tokens actually drive layout.
-4. **Trends/graphs.** Chart tokens (`--chart-*`) are defined but never consumed outside `colors_and_type.css`. The only `Sparkline` component lives in `src/components/admin/` (out of scope) and is reused by `src/components/doctor/AnalysesWorkspace.tsx` (also out of scope). `AnalysisCardScreen` shows metric rows only. → Either add a minimal sparkline / trend component to the patient app or scope it as post-MVP and remove the data-viz tokens from the System page in Figma.
-5. **Dark-mode tokens declared but never visually tested.** `@media (prefers-color-scheme: dark)` block exists in `colors_and_type.css`. → Decide: include in defence Figma or strip for clarity.
-6. **Legacy Vasily palette still in source.** `--legacy-*` tokens kept for the marketing deck / mascot. Should they appear in the Figma library (under "Marketing" subsection) or be excluded?
-7. **No empty-state pattern shipped explicitly.** Routes likely render text-only fallbacks. → Worth proposing a reusable `EmptyState` component for `History`, `Notifications`, and `Profile/access list`.
-8. **Consent variants of Button.** The consent modals reuse `Button variant="primary"`. → Track B should evaluate whether a dedicated `variant="consent"` is justified by 152-FZ audit requirements (visually distinct, slower acknowledgement) or whether the modal context is enough.
+All 8 originally-known gaps have been triaged in `proposed-changes.md` and resolved as part of Track B step 3. Status as of 2026-05-13:
+
+1. **Dead legacy button components.** **[APPLIED]** `components/PrimaryButton.tsx` and `components/SecondaryButton.tsx` removed. `primitives/Button.tsx` is the only Button surface.
+2. **Two status-chip components.** **[APPLIED]** `components/StatusChip.tsx` removed; all call sites migrated to `primitives/StatusBadge.tsx`. `StatusTone` union renamed `danger` → `error` for naming consistency. `ChipVariant` type removed from `src/types/index.ts`.
+3. **Spacing tokens declared but never consumed.** **[APPLIED]** Tailwind config gained 4 off-default aliases (`7-token` = 32px, `8-token` = 40px, `9-token` = 48px, `10-token` = 64px) so future layout code can opt in via `pb-8-token`. Existing `p-3/gap-4/pb-8` usage stays — Tailwind defaults already match `--space-1`..`--space-6`.
+4. **Trends/graphs.** **[DOC-ONLY]** Chart tokens remain in CSS as preserved infrastructure for post-MVP. Resolution per `proposed-changes.md §4`: omit from the defence Figma System page; the patient demo narrative uses metric-row + status-badge.
+5. **Dark-mode tokens declared but never visually tested.** **[DOC-ONLY]** `@media (prefers-color-scheme: dark)` kept in CSS (low cost, optionality). Will be excluded from the defence Figma library; reintroduced post-MVP via Figma Variables modes.
+6. **Legacy Vasily palette still in source.** **[DOC-ONLY]** `--legacy-*` tokens kept. To be isolated in the Figma library under a "Marketing / Vasiliy" subsection in step 4.
+7. **No empty-state pattern shipped explicitly.** **[APPLIED]** Added `primitives/EmptyState.tsx`. Migrated `routes/patient/Notifications.tsx` and `routes/patient/History.tsx`. `Profile` deliberately skipped — its "Add email" affordance is a small inline row, not a full-screen empty pattern, so EmptyState would visually overwhelm it.
+8. **Consent variants of Button.** **[NO-OP]** No new variant needed. Verified at `Consents.tsx:271` that the bottom CTA already reads «Принять и продолжить» — the gate-by-scroll/checkbox + analytics event + explicit copy already satisfies 152-FZ.
+
+**Three additional changes applied in the same pass:**
+- `tailwind.config.js` — file-level comment now explains the intentional `cyan-*` → brand-blue palette override (`proposed-changes.md §9`).
+- `colors_and_type.css` — orphan `--blue-075` token (zero consumers) removed (§10); `--radius-md/lg/xl` comments updated to document what each radius is actually used for in card vs nested-element contexts (§12).
+- `proposed-changes.md` — new §13 records the **rejection** of an unannounced `--emerald-*` ramp Claude Design silently introduced in its CSS export but never declared as a proposed change.
 
 ---
 
 ## 7. How this maps onto Track B downstream
 
-- **Step 2 (Claude Design):** consume this file plus the React source to emit `tokens.json` (Tokens Studio compatible), `components.md`, `patterns.md`, and `proposed-changes.md` covering at minimum the 8 gaps above.
-- **Step 3 (Claude Code):** apply `proposed-changes.md` in code (resolve duplicate Button / Chip pairs, decide spacing-token policy, add `EmptyState` if approved).
-- **Step 4 (Figma MCP):** build Figma file with three pages — `01 — Design System` (tokens + components), `02 — Screens` (4–6 patient screens), `03 — User Flow` (the consent-flow path used on slide 06).
+- **Step 2 (Claude Design):** **DONE.** Artifacts committed in `4d677cc` (2026-05-13): `tokens.json`, `components.md`, `patterns.md`, `proposed-changes.md`. Bundle was a tar.gz handoff from `claude.ai/design`; only the 4 canonical artifacts were promoted into the repo (HTML previews, ui_kits, and Claude Design's own `colors_and_type.css` not imported).
+- **Step 3 (Claude Code):** **DONE.** §1, §2, §3, §7, §9, §10, §12 applied in code; §8 verified no-op; §4, §5, §6, §11 deferred to Figma decisions in step 4; §13 (silent emerald ramp) rejected and documented. Build verified clean via `npm run build`.
+- **Step 4 (Figma MCP, manual):** **NEXT.** Build Figma file with three pages — `01 — Design System` (tokens + components), `02 — Screens` (4–6 patient screens), `03 — User Flow` (the consent-flow path used on slide 06). Must reflect the step-3 decisions: only one Button system, only `StatusBadge`, `EmptyState` as a primitive, chart/dark/mono omitted, legacy Vasiliy palette in a "Marketing" subsection.
 - **Step 5 (screenshots):** desktop 1440×900 (`slide-07-*`) + mobile 390×844 (`slide-08-*`), saved into `prototypes/figma-export/`.
 
 ---

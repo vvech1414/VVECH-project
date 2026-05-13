@@ -204,13 +204,41 @@ Adding a fifth visual variant would dilute the meaning of "primary action" witho
 
 ---
 
+## 13 · Reject · Unannounced `--emerald-*` ramp in Claude Design's `colors_and_type.css`
+
+**State.** Claude Design's bundled `project/colors_and_type.css` introduces a 4-stop emerald ramp (`--emerald-700/600/100/050`) inserted after `--slate-050`. The change is **not** documented in this file (`proposed-changes.md`); it appears only as a silent diff against the repo's CSS.
+
+**Verification.** Diff between repo CSS and Claude Design CSS is exactly 6 lines — the emerald block plus a blank separator. Of the 4 new tokens:
+
+| New token | Hex | Already exists in repo as | Note |
+|---|---|---|---|
+| `--emerald-050` | `#ECFDF5` | `--mint-050` | duplicate |
+| `--emerald-100` | `#D1FAE5` | `--mint-100` | duplicate |
+| `--emerald-600` | `#059669` | `--success-dark` | duplicate (Claude Design's own comment admits it: `(= --success-dark)`) |
+| `--emerald-700` | `#047857` | — | genuinely new |
+
+So 3 of 4 «new» tokens are duplicates of existing values under different names. Additionally, the tokens have **zero consumers** in Claude Design's own CSS — pure declarations, no use sites.
+
+**Decision.** **Reject.** Not applied to `intel-doc-prototype/src/design/colors_and_type.css`.
+
+**Rationale.**
+
+1. Adding a parallel namespace (`--emerald-*` next to `--mint-*` + `--success-dark`) without deprecating either side creates token-shape drift exactly what we're trying to fix in §§1-2.
+2. The single genuinely-new value (`#047857`) isn't tied to any documented use case here. If we later decide we need a separate success-foreground color, it should arrive as an explicit pull-request with the call sites it unlocks (e.g., StatusBadge `success` tone is migrated, OldAnalysesSection «Принято» row is migrated, etc.). Not as a silent declaration.
+3. Process-wise: the Claude Design contract is that ALL changes are surfaced in this document. A silent diff bypasses that contract. Calling it out here preserves the «extract-then-review» loop the project depends on.
+
+**If accepted later** (post-defence): re-propose as a separate item with named call sites and a deprecation path for `--mint-*` / `--success-dark`. Until then, the existing tokens are sufficient for the success-tone treatments StatusBadge / chip components already implement.
+
+---
+
 ## Summary of recommendations
 
-| Type | Count | Effort |
+| Type | Count | Items |
 |---|---|---|
-| Code refactor (single PR) | 3 | §1 deprecate buttons · §2 unify badges · §7 add EmptyState |
-| Tailwind config edits | 1 | §3 spacing alias |
-| Documentation only | 6 | §4 chart placeholder · §5 dark mode out · §6 marketing isolation · §8 keep consent · §9 cyan note · §10 0.075 remove · §11 mono · §12 radius |
-| Out-of-scope (post-MVP) | 2 | dark mode + chart component |
+| Code refactor (applied) | 4 | §1 deprecate buttons · §2 unify badges · §7 add EmptyState · §10 remove --blue-075 |
+| Tailwind config (applied) | 2 | §3 spacing alias · §9 cyan-override comment |
+| Doc-only (applied) | 2 | §8 consent CTA confirmed · §12 radius comments |
+| Doc-only (Figma decision, no code) | 4 | §4 chart placeholder · §5 dark mode out · §6 marketing isolation · §11 mono drop |
+| Rejected | 1 | §13 emerald ramp (unannounced, duplicates existing tokens) |
 
-**Before defence:** items §1, §2, §7 should be code-merged (low-risk, visible quality wins). Items §9, §12 should be in the README. Everything else can be documentation-only.
+**Pre-defence implementation status (2026-05-13):** items §1, §2, §3, §7, §9, §10, §12 are merged into the patient prototype in a single commit. Items §4, §5, §6, §11 are documentation-only decisions to be reflected in the Figma library on Track B step 4. Item §13 is a recorded rejection of an unannounced Claude Design change.

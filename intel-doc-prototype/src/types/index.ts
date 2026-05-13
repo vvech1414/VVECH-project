@@ -21,7 +21,6 @@ export type ScreenName =
 export type OcrStatus = 'recognized' | 'needs-review' | 'no-ocr'
 export type AccessStatus = 'active' | 'expired' | 'none'
 export type PlanItemStatus = 'done' | 'pending' | 'overdue'
-export type ChipVariant = 'success' | 'warning' | 'error' | 'info' | 'neutral'
 
 export interface MetricValue {
   parameter: string

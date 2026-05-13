@@ -1,4 +1,4 @@
-import StatusChip from './StatusChip'
+import StatusBadge from './primitives/StatusBadge'
 
 interface AccessCardProps {
   recipient: string
@@ -26,10 +26,9 @@ export default function AccessCard({
         <p className="text-[15px] font-bold text-navy-900 leading-snug">
           {recipient}
         </p>
-        <StatusChip
-          label={active ? 'Активен' : 'Истёк'}
-          variant={active ? 'success' : 'neutral'}
-        />
+        <StatusBadge tone={active ? 'success' : 'neutral'}>
+          {active ? 'Активен' : 'Истёк'}
+        </StatusBadge>
       </div>
       <p className="text-caption text-slate-500 mb-4">{type}</p>
       <div className="space-y-2">

@@ -1,5 +1,5 @@
 import type { Analysis } from '../types'
-import StatusChip from './StatusChip'
+import StatusBadge from './primitives/StatusBadge'
 
 interface AnalysisListItemProps {
   analysis: Analysis
@@ -7,9 +7,9 @@ interface AnalysisListItemProps {
 }
 
 function ocrChip(status: Analysis['ocrStatus']) {
-  if (status === 'recognized') return <StatusChip label="Распознано" variant="success" />
-  if (status === 'needs-review') return <StatusChip label="Нужна проверка" variant="warning" />
-  return <StatusChip label="Без OCR" variant="neutral" />
+  if (status === 'recognized') return <StatusBadge tone="success">Распознано</StatusBadge>
+  if (status === 'needs-review') return <StatusBadge tone="warning">Нужна проверка</StatusBadge>
+  return <StatusBadge tone="neutral">Без OCR</StatusBadge>
 }
 
 export default function AnalysisListItem({ analysis, onClick }: AnalysisListItemProps) {

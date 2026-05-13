@@ -4,6 +4,7 @@ import PhoneFrame from '../../components/patient/PhoneFrame'
 import TopHeader from '../../components/patient/TopHeader'
 import TabBar from '../../components/primitives/TabBar'
 import StatusBadge from '../../components/primitives/StatusBadge'
+import EmptyState from '../../components/primitives/EmptyState'
 import {
   KIND_TINT,
   useHistoryEvents,
@@ -40,24 +41,17 @@ export default function History() {
 
       <div className="flex-1 overflow-y-auto px-5 pb-[110px] flex flex-col gap-4">
         {events.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16 gap-3">
-            <div className="h-16 w-16 rounded-2xl bg-cyan-50 text-cyan-500 flex items-center justify-center">
-              <FileText size={28} strokeWidth={2} />
-            </div>
-            <p className="text-h2-ui font-bold text-ink-strong">
-              Здесь будет история ваших действий
-            </p>
-            <p className="text-caption text-ink-muted leading-relaxed max-w-[280px]">
-              Когда вы начнёте загружать анализы и получать обновления — они появятся здесь.
-            </p>
-            <button
-              onClick={() => nav('/patient/upload')}
-              className="mt-3 inline-flex items-center gap-2 rounded-xl bg-cyan-500 text-white px-5 py-3 text-[15px] font-bold tracking-ui"
-            >
-              <Plus size={18} strokeWidth={2.5} />
-              Добавить анализ
-            </button>
-          </div>
+          <EmptyState
+            Icon={FileText}
+            title="Здесь будет история ваших действий"
+            body="Когда вы начнёте загружать анализы и получать обновления — они появятся здесь."
+            action={{
+              label: 'Добавить анализ',
+              variant: 'button',
+              icon: Plus,
+              onClick: () => nav('/patient/upload'),
+            }}
+          />
         ) : (
           groups.map((group) => (
             <section key={group.key} className="flex flex-col gap-2">

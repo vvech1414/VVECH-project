@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 export type StatusTone =
   | 'success'
   | 'warning'
-  | 'danger'
+  | 'error'
   | 'info'
   | 'neutral'
 
@@ -17,7 +17,7 @@ interface StatusBadgeProps {
 const TONE: Record<StatusTone, string> = {
   success: 'bg-[#ECFDF5] text-emerald-700',
   warning: 'bg-[#FFFBEB] text-amber-700',
-  danger: 'bg-[#FFF1F2] text-rose-700',
+  error: 'bg-[#FFF1F2] text-rose-700',
   info: 'bg-cyan-50 text-cyan-600',
   neutral: 'bg-slate-100 text-slate-600',
 }

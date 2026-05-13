@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Bell, ChevronRight } from 'lucide-react'
 import PhoneFrame from '../../components/patient/PhoneFrame'
 import StatusBadge from '../../components/primitives/StatusBadge'
+import EmptyState from '../../components/primitives/EmptyState'
 import {
   KIND_TINT,
   useHistoryEvents,
@@ -50,23 +51,15 @@ export default function Notifications() {
 
       <div className="flex-1 overflow-y-auto px-5 pb-8 flex flex-col gap-4">
         {unread.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16 gap-3">
-            <div className="h-16 w-16 rounded-2xl bg-cyan-50 text-cyan-500 flex items-center justify-center">
-              <Bell size={28} strokeWidth={2} />
-            </div>
-            <p className="text-h2-ui font-bold text-ink-strong">
-              Пока ничего нового
-            </p>
-            <p className="text-caption text-ink-muted leading-relaxed max-w-[280px]">
-              Мы сообщим о запросах врача и обновлениях плана.
-            </p>
-            <button
-              onClick={() => nav('/patient/history')}
-              className="mt-3 text-[12px] font-bold tracking-caps uppercase text-cyan-500"
-            >
-              Открыть историю
-            </button>
-          </div>
+          <EmptyState
+            Icon={Bell}
+            title="Пока ничего нового"
+            body="Мы сообщим о запросах врача и обновлениях плана."
+            action={{
+              label: 'Открыть историю',
+              onClick: () => nav('/patient/history'),
+            }}
+          />
         ) : (
           groups.map((group) => (
             <section key={group.key} className="flex flex-col gap-2">

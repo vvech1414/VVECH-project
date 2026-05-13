@@ -1,4 +1,4 @@
-import StatusChip from '../StatusChip'
+import StatusBadge from '../primitives/StatusBadge'
 import type { DepartmentAccess } from '../../store/types'
 
 interface DepartmentAccessRowProps {
@@ -28,11 +28,9 @@ export default function DepartmentAccessRow({ row }: DepartmentAccessRowProps) {
       </div>
       <div className="flex items-center gap-3 flex-shrink-0">
         {expiring > 0 && (
-          <StatusChip
-            label={`скоро ${expiring}`}
-            variant="warning"
-            size="sm"
-          />
+          <StatusBadge tone="warning" size="sm">
+            {`скоро ${expiring}`}
+          </StatusBadge>
         )}
         <div className="text-right">
           <p className="font-display text-[20px] font-extrabold leading-none text-navy-900">

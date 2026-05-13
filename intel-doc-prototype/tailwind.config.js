@@ -1,8 +1,24 @@
 /** @type {import('tailwindcss').Config} */
+// NOTE: this config intentionally rewrites Tailwind's default `cyan-*` palette
+// to the medical-blue ramp (see `colors.cyan` block below). Historical class
+// names like `bg-cyan-50` therefore resolve to brand blue (#EFF6FF…#1E3A8A),
+// not Tailwind's default bright cyan (#06B6D4). Component code reads as
+// `text-cyan-500` for legibility, but the rendered color is blue. The Figma
+// System page labels this ramp "Brand blue (Tailwind alias: cyan-*)".
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      spacing: {
+        // Token aliases for the off-default steps in `--space-*`
+        // (4-pt grid up to --space-6 = 24px matches Tailwind defaults).
+        // Use these when a layout must follow the documented 8/4-grid token
+        // scale: e.g. `pb-8-token` for a 40px sticky-CTA gutter.
+        '7-token': '32px',   // --space-7
+        '8-token': '40px',   // --space-8
+        '9-token': '48px',   // --space-9
+        '10-token': '64px',  // --space-10
+      },
       colors: {
         // ─── Semantic aliases (mirror colors_and_type.css) ──────────────
         brand: 'var(--color-primary)',

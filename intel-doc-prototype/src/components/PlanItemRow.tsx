@@ -1,5 +1,5 @@
 import type { PlanItem } from '../types'
-import StatusChip from './StatusChip'
+import StatusBadge from './primitives/StatusBadge'
 
 interface PlanItemRowProps {
   item: PlanItem
@@ -9,10 +9,10 @@ interface PlanItemRowProps {
 export default function PlanItemRow({ item, onClick }: PlanItemRowProps) {
   const chipProps =
     item.status === 'done'
-      ? { label: 'Выполнено', variant: 'success' as const }
+      ? { label: 'Выполнено', tone: 'success' as const }
       : item.status === 'overdue'
-      ? { label: 'Просрочено', variant: 'error' as const }
-      : { label: 'Загрузить', variant: 'warning' as const }
+      ? { label: 'Просрочено', tone: 'error' as const }
+      : { label: 'Загрузить', tone: 'warning' as const }
 
   return (
     <button
@@ -48,7 +48,7 @@ export default function PlanItemRow({ item, onClick }: PlanItemRowProps) {
         <p className="text-caption text-slate-500 mt-1.5 leading-snug">{item.whyNeeded}</p>
       </div>
       <div className="flex-shrink-0">
-        <StatusChip label={chipProps.label} variant={chipProps.variant} />
+        <StatusBadge tone={chipProps.tone}>{chipProps.label}</StatusBadge>
       </div>
     </button>
   )
