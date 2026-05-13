@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8"><title>IntelDoc — Slides</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#000;color:#000;font-family:var(--font-display);-webkit-font-smoothing:antialiased}
+  section{background:#DCF2FF;overflow:hidden}
+  .cyan{background:#DCF2FF}
+  .white{background:#fff}
+  .rule{position:absolute;left:36px;right:36px;top:78px;border-top:2.5px solid #000}
+  .kicker{position:absolute;left:36px;top:36px;font:400 44px/1 var(--font-display);letter-spacing:-0.03em;color:#000}
+  .h1{font-family:'Montserrat Alternates',var(--font-display);font-weight:500;font-size:114px;line-height:100px;letter-spacing:-0.02em;color:#000;margin:0}
+  .h2{font-family:'Montserrat Alternates',var(--font-display);font-weight:500;font-size:90px;line-height:1;letter-spacing:-0.02em;color:#000;margin:0}
+  .pill{border-radius:100px;padding:19px 32px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:30px;letter-spacing:-0.01em;line-height:1.4}
+  .pill-out{background:#fff;border:2px solid #000;color:#000}
+  .pill-blue{background:#476DF6;color:#fff;border:2px solid #476DF6}
+  .card{background:#fff;border:2px solid #000;border-radius:36px;padding:40px 44px}
+  .card h3{font-family:var(--font-display);font-weight:700;font-size:48px;line-height:1.1;margin:0 0 16px;letter-spacing:-0.02em}
+  .card p{font-family:var(--font-display);font-weight:400;font-size:28px;line-height:1.35;color:#1F2024;margin:0}
+  .num{width:72px;height:72px;border-radius:999px;background:#476DF6;color:#fff;display:flex;align-items:center;justify-content:center;font:700 38px/1 var(--font-display);margin-bottom:20px}
+  .foot{position:absolute;left:36px;bottom:36px;font:500 20px/1 var(--font-display);color:#0F1014;letter-spacing:-.01em;opacity:.7}
+  .page{position:absolute;right:36px;bottom:36px;font:500 20px/1 var(--font-data);color:#0F1014;opacity:.6;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<script src="deck-stage.js"></script>
+
+<script type="application/json" id="speaker-notes">[]</script>
+
+<deck-stage width="1920" height="1080">
+
+<!-- 1. Title -->
+<section data-label="Title" style="position:relative;background:#DCF2FF">
+  <div class="rule"></div>
+  <div class="kicker">intelDoc</div>
+  <div style="position:absolute;left:36px;top:200px;width:1100px">
+    <div class="h1" style="font-size:140px;line-height:120px">ИИ-ассистент<br/>для диабетиков</div>
+    <div style="margin-top:48px;font-family:var(--font-display);font-size:36px;line-height:1.3;color:#1F2024;max-width:900px">
+      Агрегируем разрозненные замеры сахара, инсулина и анализы. Помогаем пациенту и врачу быстрее готовиться к приёму.
+    </div>
+    <div style="margin-top:72px;display:flex;gap:16px">
+      <div class="pill pill-blue">Pitch · 2026</div>
+      <div class="pill pill-out">Confidential</div>
+    </div>
+  </div>
+  <img src="../assets/vasiliy-mascot.png" alt="" style="position:absolute;right:80px;bottom:0;width:820px;height:auto">
+  <div class="foot">intelDoc</div>
+  <div class="page">01</div>
+</section>
+
+<!-- 2. Problem -->
+<section data-label="Problem" style="position:relative;background:#DCF2FF">
+  <div class="rule"></div>
+  <div class="kicker">проблема</div>
+  <div style="position:absolute;left:36px;top:142px"><div class="h1">Сложности при контроле сахара</div></div>
+
+  <div style="position:absolute;left:36px;right:36px;top:420px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+    <div class="card"><div class="num">1</div><h3>Данные разрознены</h3><p>Замеры в тетради, инсулин в Excel, анализы в трёх клиниках — картина никогда не собирается.</p></div>
+    <div class="card"><div class="num">2</div><h3>Недоступность систем</h3><p>Автоматические помпы и сенсоры дороги и в дефиците в регионах.</p></div>
+    <div class="card"><div class="num">3</div><h3>Сложный контроль</h3><p>Расчёт доз инсулина при шприц-ручках требует опыта и постоянного внимания.</p></div>
+    <div class="card"><div class="num">4</div><h3>Сложность с Велгией</h3><p>Риск гипогликемии при титрации препарата — нужна регулярная коррекция.</p></div>
+  </div>
+  <div class="foot">intelDoc</div>
+  <div class="page">02</div>
+</section>
+
+<!-- 3. Solution -->
+<section data-label="Solution" style="position:relative;background:#DCF2FF">
+  <div class="rule"></div>
+  <div class="kicker">решение</div>
+  <div style="position:absolute;left:36px;top:142px"><div class="h1">Наше решение</div></div>
+
+  <div style="position:absolute;left:36px;top:374px;width:1180px">
+    <div class="pill pill-blue" style="width:calc(100% - 64px)">
+      <span style="font-weight:600">Мобильное приложение с ИИ-ассистентом</span>
+    </div>
+    <div class="pill pill-out" style="margin-top:20px;width:calc(100% - 64px)">
+      Единая лента записей: сахар, инсулин, еда, активность, препараты
+    </div>
+
+    <div style="margin-top:72px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div style="background:#fff;border:2px solid #000;border-radius:28px;padding:28px 32px">
+        <div style="font:700 26px/1 var(--font-display);color:#476DF6;margin-bottom:10px">Для пациента</div>
+        <div style="font:400 24px/1.3 var(--font-display)">Голосом и в один тап. Василий подсказывает, врач видит полную картину.</div>
+      </div>
+      <div style="background:#fff;border:2px solid #000;border-radius:28px;padding:28px 32px">
+        <div style="font:700 26px/1 var(--font-display);color:#476DF6;margin-bottom:10px">Для клиники</div>
+        <div style="font:400 24px/1.3 var(--font-display)">Структурированные данные и AI-сводки к приёму. Минимум интеграций.</div>
+      </div>
+    </div>
+  </div>
+
+  <img src="../assets/app-hero-phone.png" alt="" style="position:absolute;right:40px;top:140px;width:540px;height:auto;filter:drop-shadow(0 40px 80px rgba(0,0,0,.15))">
+  <div class="foot">intelDoc</div>
+  <div class="page">03</div>
+</section>
+
+<!-- 4. Big quote -->
+<section data-label="Quote" style="position:relative;background:#476DF6">
+  <div style="position:absolute;left:36px;right:36px;top:78px;border-top:2.5px solid #fff"></div>
+  <div style="position:absolute;left:36px;top:36px;font:400 44px/1 var(--font-display);letter-spacing:-0.03em;color:#fff">цитата · пациент</div>
+  <div style="position:absolute;left:120px;right:120px;top:50%;transform:translateY(-50%)">
+    <div style="font-family:'Montserrat Alternates';font-weight:500;font-size:96px;line-height:108px;letter-spacing:-0.02em;color:#fff">
+      «Раньше я вёл дневник в тетради и терял его каждые три месяца. Сейчас просто говорю Василию — и всё сохранено.»
+    </div>
+    <div style="margin-top:64px;font:500 32px/1 var(--font-display);color:#DCF2FF;letter-spacing:-.01em">Михалыч, 58 · СД1, Санкт-Петербург</div>
+  </div>
+  <div style="position:absolute;left:36px;bottom:36px;font:500 20px/1 var(--font-display);color:#fff;opacity:.7">intelDoc</div>
+  <div style="position:absolute;right:36px;bottom:36px;font:500 20px/1 var(--font-data);color:#fff;opacity:.6;font-variant-numeric:tabular-nums">04</div>
+</section>
+
+<!-- 5. Team -->
+<section data-label="Team" style="position:relative;background:#DCF2FF">
+  <div class="rule"></div>
+  <div class="kicker">команда</div>
+  <div style="position:absolute;left:36px;top:142px"><div class="h1">Кто делает продукт</div></div>
+
+  <div style="position:absolute;left:36px;right:36px;top:420px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px">
+    <div class="card" style="padding:32px">
+      <div style="width:100%;aspect-ratio:1;border-radius:24px;overflow:hidden;background:#F5F9FA;margin-bottom:24px">
+        <img src="../assets/founder-portrait.png" alt="" style="width:100%;height:100%;object-fit:cover">
+      </div>
+      <h3 style="font-size:40px">Андрей Болотов</h3>
+      <p style="font-size:22px">CEO · врач-эндокринолог.<br/>10 лет клинической практики.</p>
+    </div>
+    <div class="card" style="padding:32px">
+      <div style="width:100%;aspect-ratio:1;border-radius:24px;background:#F5F9FA;margin-bottom:24px;display:flex;align-items:center;justify-content:center;font:700 28px/1 var(--font-display);color:#C5C6CC">+ Photo</div>
+      <h3 style="font-size:40px">CTO</h3>
+      <p style="font-size:22px">Health-tech backend, ML, ONC/ФЗ-152 compliance.</p>
+    </div>
+    <div class="card" style="padding:32px">
+      <div style="width:100%;aspect-ratio:1;border-radius:24px;background:#F5F9FA;margin-bottom:24px;display:flex;align-items:center;justify-content:center;font:700 28px/1 var(--font-display);color:#C5C6CC">+ Photo</div>
+      <h3 style="font-size:40px">Design lead</h3>
+      <p style="font-size:22px">RBC TV, MIR TV. Руководство командой 30+ человек.</p>
+    </div>
+  </div>
+  <div class="foot">intelDoc</div>
+  <div class="page">05</div>
+</section>
+
+</deck-stage>
+</body></html>

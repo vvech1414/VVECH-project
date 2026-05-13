@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Shadows</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>html,body{margin:0;background:#F5F9FA;padding:28px 24px;font-family:var(--font-ui)}
+.wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.box{height:70px;background:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--ink-700);font-weight:700;font-size:12px}
+.lbl{text-align:center;font-size:10px;color:var(--ink-500);font-family:var(--font-data);margin-top:8px;text-transform:uppercase;letter-spacing:.08em}
+.fab{background:var(--blue-600);color:#fff;border-radius:999px;height:60px;width:60px;margin:5px auto}
+</style></head><body>
+<div class="wrap">
+  <div><div class="box" style="box-shadow:var(--shadow-xs)">xs</div><div class="lbl">hairline</div></div>
+  <div><div class="box" style="box-shadow:var(--shadow-sm)">sm</div><div class="lbl">float</div></div>
+  <div><div class="box" style="box-shadow:var(--shadow-md)">md</div><div class="lbl">modal</div></div>
+  <div><div class="box" style="box-shadow:var(--shadow-lg);display:flex;justify-content:center;align-items:center"><div class="fab" style="box-shadow:var(--shadow-lg);margin:0;display:flex;align-items:center;justify-content:center">+</div></div><div class="lbl">lg · FAB</div></div>
+</div>
+</body></html>

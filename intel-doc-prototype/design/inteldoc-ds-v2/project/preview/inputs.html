@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Inputs</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>html,body{margin:0;background:#fff;padding:22px;font-family:var(--font-ui)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:600px}
+.fld{background:#fff;border:1.5px solid var(--ink-200);border-radius:12px;padding:14px 16px;font:400 14px/1 var(--font-ui);color:var(--ink-800)}
+.fld.focus{border-color:var(--blue-600);box-shadow:var(--shadow-focus)}
+.fld .ph{color:var(--ink-400)}
+.search{background:var(--ink-050);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:10px;color:var(--ink-500);font-size:14px}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px}
+.pick{display:flex;align-items:center;gap:10px;border:1.5px solid var(--blue-600);background:var(--blue-050);border-radius:12px;padding:12px 16px;font:600 13px/1 var(--font-ui);color:var(--ink-900)}
+.pick .check{width:20px;height:20px;border-radius:6px;background:var(--blue-600);display:flex;align-items:center;justify-content:center;color:#fff}
+.pick2{border-color:var(--ink-200);background:#fff;color:var(--ink-800)}
+.pick2 .check{background:#fff;box-shadow:inset 0 0 0 1.5px var(--ink-300)}
+svg{fill:none;stroke:currentColor;stroke-width:2}
+</style></head><body>
+<div class="search"><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Поиск</div>
+<div class="grid" style="margin-top:14px">
+  <div class="fld"><span class="ph">12:30</span></div>
+  <div class="fld focus">4.5 ммоль/л</div>
+</div>
+<div class="row">
+  <div class="pick">До еды <div class="check"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div></div>
+  <div class="pick pick2">После еды <div class="check"></div></div>
+</div>
+</body></html>

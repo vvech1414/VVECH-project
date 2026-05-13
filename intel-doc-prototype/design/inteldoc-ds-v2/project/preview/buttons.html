@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>html,body{margin:0;background:#fff;padding:22px;font-family:var(--font-ui)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.btn{border:0;cursor:pointer;border-radius:12px;padding:12px 18px;font:700 14px/1 var(--font-ui);display:inline-flex;align-items:center;gap:8px;letter-spacing:.005em}
+.p{background:var(--blue-600);color:#fff}
+.p:hover{background:var(--color-primary-hover)}
+.s{background:#fff;color:var(--blue-600);box-shadow:inset 0 0 0 1.5px var(--blue-600)}
+.s:hover{background:var(--blue-050)}
+.t{background:transparent;color:var(--blue-600)}
+.big{padding:16px 22px;border-radius:14px;width:260px;justify-content:center;font-size:15px}
+.ic{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none}
+</style></head><body>
+<div class="row">
+  <button class="btn p">Добавить <svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button class="btn p">Сохранить</button>
+  <button class="btn s">Заказать <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18l-2 13H5L3 6zm5 0V4a4 4 0 0 1 8 0v2"/></svg></button>
+  <button class="btn s">Обсудить</button>
+  <button class="btn t">Еще ›</button>
+</div>
+<div class="row">
+  <button class="btn p big">Добавить <svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button class="btn s big">Задать вопрос <svg class="ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+</div>
+</body></html>

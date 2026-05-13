@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8"><title>IntelDoc — Mobile UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#EAEFF5;min-height:100vh;font-family:var(--font-ui)}
+  .stage{min-height:100vh;display:flex;gap:28px;align-items:flex-start;justify-content:center;padding:28px 24px;flex-wrap:wrap}
+  .phone{
+    position:relative;width:390px;height:844px;background:#fff;
+    border-radius:46px;overflow:hidden;
+    box-shadow:0 30px 60px rgba(3,65,180,.12),0 0 0 10px #0F1014,0 0 0 12px #2A2F32;
+    display:flex;flex-direction:column;
+  }
+  .phone .notch{
+    position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:120px;height:32px;border-radius:18px;background:#0F1014;z-index:30;pointer-events:none;
+  }
+  .home-indicator{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:999px;background:rgba(15,16,20,.25);z-index:30}
+  .screen{flex:1;overflow-y:auto;position:relative;background:#fff}
+  .side{width:320px;background:#fff;border-radius:20px;padding:22px;box-shadow:var(--shadow-sm)}
+  .side h1{font:700 18px/1.2 var(--font-ui);color:var(--slate-900);margin:0 0 6px}
+  .side p{font:400 13px/1.5 var(--font-ui);color:var(--slate-600);margin:0 0 14px}
+  .nav{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .nav button{
+    border:0;background:var(--slate-050);color:var(--slate-800);
+    border-radius:10px;padding:10px 12px;font:600 13px/1.1 var(--font-ui);cursor:pointer;text-align:left
+  }
+  .nav button.on{background:var(--blue-600);color:#fff}
+  .kicker{font:700 10px/1 var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--slate-500);margin:16px 0 8px}
+  .note{margin-top:18px;padding:12px 14px;background:var(--blue-050);border-radius:12px;font:400 12px/1.5 var(--font-ui);color:var(--slate-700)}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="screen"></div>
+    <div class="home-indicator"></div>
+  </div>
+  <div class="side">
+    <h1>IntelDoc Mobile UI Kit</h1>
+    <p>Patient app — click through the core screens. Vasiliy chat is interactive (type and send).</p>
+    <div class="kicker">Screens</div>
+    <div class="nav" id="nav"></div>
+    <div class="kicker">Overlays</div>
+    <div class="nav">
+      <button id="sheetAdd">Add entry</button>
+      <button id="sheetSugar">Sugar entry</button>
+    </div>
+    <div class="note">Built from <code>IntelDoc_UI</code> Figma page + v.1 cockpit/app screenshots. Assistant mascot: <b>Vasiliy</b>. v.1 product blue <b>#2563EB</b>, page bg <b>#F8FAFC</b>.</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="Primitives.jsx"></script>
+<script type="text/babel" src="Screens.jsx"></script>
+<script type="text/babel">
+const TABS = [
+  { id:'home', label:'Главная', icon:'home' },
+  { id:'diary', label:'Дневник', icon:'book' },
+  { id:'market', label:'Маркет', icon:'shop' },
+  { id:'settings', label:'Настройки', icon:'settings' },
+];
+
+function App() {
+  const [view, setView] = React.useState(localStorage.getItem('id-view') || 'home');
+  const [sheet, setSheet] = React.useState(null);
+  React.useEffect(() => { localStorage.setItem('id-view', view); }, [view]);
+
+  const screens = {
+    home:    <ScreenMain onOpen={(k)=>setView(k==='chat'?'chat':view)} />,
+    glycemia:<ScreenGlycemia onBack={()=>setView('home')} onOpen={(k)=>setView(k)} />,
+    chat:    <ScreenChat onBack={()=>setView('home')} />,
+    diary:   <ScreenDiary />,
+    market:  <ScreenMarket />,
+    settings:<div style={{padding:'40px 24px',color:'var(--slate-500)'}}><StatusBar/><div style={{fontWeight:700,fontSize:26,marginTop:20,color:'var(--slate-700)'}}>Настройки</div><div style={{marginTop:20}}>Раздел в разработке.</div></div>,
+  };
+
+  const tabbed = ['home','diary','market','settings'].includes(view);
+
+  // expose view toggles to side nav
+  React.useEffect(() => {
+    const nav = document.getElementById('nav');
+    nav.innerHTML = '';
+    [['home','Home'],['glycemia','Glycemia'],['chat','Chat'],['diary','Diary'],['market','Market'],['settings','Settings']].forEach(([id,label])=>{
+      const b = document.createElement('button');
+      b.textContent = label;
+      if(view===id) b.className='on';
+      b.onclick = ()=>setView(id);
+      nav.appendChild(b);
+    });
+    document.getElementById('sheetAdd').onclick = ()=>setSheet('add');
+    document.getElementById('sheetSugar').onclick = ()=>setSheet('sugar');
+  }, [view]);
+
+  const addSheet = (
+    <BottomSheet open={sheet==='add'} onClose={()=>setSheet(null)} title="Добавить новую запись">
+      {['Медикаменты','Активность','Инсулин','Сахар','Еда'].map(l => (
+        <div key={l} style={{
+          background:'linear-gradient(90deg,#F8F9FE 0%, #DCF2FF 100%)',
+          borderRadius:14, padding:'16px 18px', fontWeight:700, color:'var(--slate-900)'
+        }}>{l}</div>
+      ))}
+      <div style={{display:'flex',justifyContent:'center',marginTop:8}}>
+        <button style={{width:56,height:56,borderRadius:999,background:'var(--blue-600)',border:0,color:'#fff',boxShadow:'var(--shadow-lg)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <Icon name="mic" size={22} />
+        </button>
+      </div>
+    </BottomSheet>
+  );
+
+  const sugarSheet = (
+    <BottomSheet open={sheet==='sugar'} onClose={()=>setSheet(null)} title="Сахар">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:20,padding:'8px 0'}}>
+        <button style={{width:42,height:42,border:0,borderRadius:999,background:'var(--blue-050)',color:'var(--blue-600)',fontSize:20,fontWeight:700,cursor:'pointer'}}>−</button>
+        <div style={{textAlign:'center'}}>
+          <div style={{fontFamily:'var(--font-data)',fontWeight:700,fontSize:28,color:'var(--slate-900)'}}>4.5</div>
+          <div style={{fontSize:12,color:'var(--slate-500)'}}>ммоль/л</div>
+        </div>
+        <button style={{width:42,height:42,border:0,borderRadius:999,background:'var(--blue-050)',color:'var(--blue-600)',fontSize:20,fontWeight:700,cursor:'pointer'}}>+</button>
+      </div>
+      <div style={{height:1,background:'var(--slate-100)',margin:'4px 0'}}/>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+        <div style={{border:'1.5px solid var(--blue-600)',background:'var(--blue-050)',borderRadius:12,padding:'14px 16px',display:'flex',alignItems:'center',justifyContent:'space-between',fontWeight:600,color:'var(--slate-900)'}}>До еды <span style={{width:22,height:22,borderRadius:7,background:'var(--blue-600)',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center'}}>✓</span></div>
+        <div style={{border:'1.5px solid var(--slate-200)',borderRadius:12,padding:'14px 16px',display:'flex',alignItems:'center',justifyContent:'space-between',fontWeight:600,color:'var(--slate-700)'}}>После еды <span style={{width:22,height:22,borderRadius:7,boxShadow:'inset 0 0 0 1.5px var(--slate-300)'}}/></div>
+      </div>
+      <div>
+        <div style={{fontWeight:700,color:'var(--slate-800)',marginBottom:8}}>Время</div>
+        <div style={{border:'1.5px solid var(--slate-200)',borderRadius:12,padding:'14px 16px',color:'var(--slate-800)'}}>12:30</div>
+      </div>
+      <div>
+        <div style={{fontWeight:700,color:'var(--slate-800)',marginBottom:10,display:'flex',justifyContent:'space-between'}}>Теги <Icon name="caret" size={16}/></div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          {['Завтрак','Обед','Перекус','Ужин','Тренировка','Работа'].map(l => <Chip key={l}>{l}</Chip>)}
+          <Chip active>Досуг</Chip>
+          <Chip>Особое событие</Chip>
+        </div>
+      </div>
+      <Button variant="primary" iconRight="plus" full size="lg" onClick={()=>setSheet(null)}>Добавить</Button>
+    </BottomSheet>
+  );
+
+  return (
+    <div style={{position:'relative',height:'100%',background:'#fff',display:'flex',flexDirection:'column'}}>
+      <div style={{flex:1,overflowY:'auto',position:'relative'}}>{screens[view]}</div>
+      {tabbed && <TabBar current={view} onChange={setView} items={TABS} />}
+      {tabbed && <FAB onClick={()=>setSheet('add')} />}
+      {addSheet}
+      {sugarSheet}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('screen')).render(<App />);
+</script>
+</body></html>
