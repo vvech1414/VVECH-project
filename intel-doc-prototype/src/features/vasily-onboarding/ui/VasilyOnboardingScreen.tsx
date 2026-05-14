@@ -28,9 +28,9 @@ export default function VasilyOnboardingScreen() {
       <OnboardingChrome progressLabel="Василий · Перед стартом" />
 
       <div className="flex-1 overflow-y-auto px-5 pb-4 flex flex-col gap-5">
-        <section className="relative overflow-hidden rounded-2xl bg-navy-900 px-5 pt-6 pb-5 text-white">
-          <div className="relative flex items-center gap-4">
-            <div className="min-w-0 flex-1">
+        <section className="relative overflow-hidden rounded-2xl bg-navy-900 px-5 pt-6 pb-6 text-white">
+          <div className="relative flex items-start gap-3">
+            <div className="min-w-0 flex-1 pt-1">
               <p className="text-[10px] font-bold uppercase tracking-caps text-cyan-300">
                 Привет, я Василий
               </p>
@@ -38,7 +38,7 @@ export default function VasilyOnboardingScreen() {
                 Давайте быстро покажу, что будет дальше
               </h1>
             </div>
-            <VasilyMascot size={150} halo className="-mr-2 flex-shrink-0" />
+            <VasilyMascot size={116} halo className="flex-shrink-0" />
           </div>
         </section>
 
