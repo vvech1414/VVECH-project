@@ -12,13 +12,15 @@ interface PhoneFrameProps {
  *   layout fluidly adapts from ~320px up through 480px+ phones with no
  *   horizontal scroll and no fixed-pixel panel width.
  * - On wider viewports (≥640px) renders a centered 390×844 phone-style card
- *   anchored at the iPhone-class design width.
+ *   anchored at the iPhone-class design width, then CSS-scales it to fill the
+ *   available viewport (capped at 1.6×) so the demo is legible on tablet and
+ *   desktop without distorting the mobile layout.
  */
 export default function PhoneFrame({ children, dark = false }: PhoneFrameProps) {
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-slate-200 p-0 sm:p-4">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-slate-200 p-0 sm:p-4 overflow-hidden">
       <div
-        className={`relative w-full sm:max-w-[390px] min-h-[100dvh] sm:min-h-0 sm:h-[844px] sm:rounded-[40px] overflow-hidden shadow-md flex flex-col ${
+        className={`phone-frame-fit relative w-full sm:w-[390px] sm:max-w-[390px] min-h-[100dvh] sm:min-h-0 sm:h-[844px] sm:rounded-[40px] overflow-hidden shadow-md flex flex-col ${
           dark ? 'bg-navy-900' : 'bg-page-bg'
         }`}
         style={{ minHeight: '100dvh' }}
